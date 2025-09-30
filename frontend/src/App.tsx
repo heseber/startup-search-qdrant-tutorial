@@ -126,42 +126,45 @@ const App: React.FC = () => {
               </label>
             </div>
 
-            {enableCitySearch && (
-              <input
-                type="text"
-                placeholder="Enter city..."
-                value={cityQuery}
-                onChange={(e) => setCityQuery(e.target.value)}
-                onKeyPress={handleKeyPress}
-                className="search-input city-input"
-              />
-            )}
-
-            <div className="limit-input-container">
-              <label htmlFor="limit-input" className="limit-label">
-                Number of results:
-              </label>
-              <input
-                id="limit-input"
-                type="number"
-                min="1"
-                max="100"
-                value={limit}
-                onChange={handleLimitChange}
-                className={`limit-input ${limitError ? 'error' : ''}`}
-                title={limitError || 'Enter a number between 1 and 100'}
-              />
-              {limitError && (
-                <div className="limit-error-tooltip">
-                  {limitError}
+            <div className="search-parameters-row">
+              {enableCitySearch && (
+                <div className="city-input-container">
+                  <input
+                    type="text"
+                    placeholder="Enter city..."
+                    value={cityQuery}
+                    onChange={(e) => setCityQuery(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    className="search-input city-input"
+                  />
                 </div>
               )}
-            </div>
 
-            <div className="threshold-input-container">
-              <label htmlFor="threshold-input" className="threshold-label">
-                Score threshold:
-              </label>
+              <div className="limit-input-container">
+                <label htmlFor="limit-input" className="limit-label">
+                  Number of results:
+                </label>
+                <input
+                  id="limit-input"
+                  type="number"
+                  min="1"
+                  max="100"
+                  value={limit}
+                  onChange={handleLimitChange}
+                  className={`limit-input ${limitError ? 'error' : ''}`}
+                  title={limitError || 'Enter a number between 1 and 100'}
+                />
+                {limitError && (
+                  <div className="limit-error-tooltip">
+                    {limitError}
+                  </div>
+                )}
+              </div>
+
+              <div className="threshold-input-container">
+                <label htmlFor="threshold-input" className="threshold-label">
+                  Score threshold:
+                </label>
               <input
                 id="threshold-input"
                 type="number"
@@ -173,11 +176,12 @@ const App: React.FC = () => {
                 className={`threshold-input ${scoreThresholdError ? 'error' : ''}`}
                 title={scoreThresholdError || 'Enter a number between 0 and 1'}
               />
-              {scoreThresholdError && (
-                <div className="threshold-error-tooltip">
-                  {scoreThresholdError}
-                </div>
-              )}
+                {scoreThresholdError && (
+                  <div className="threshold-error-tooltip">
+                    {scoreThresholdError}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           

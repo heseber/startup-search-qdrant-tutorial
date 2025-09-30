@@ -44,7 +44,7 @@ body {
 .search-fields {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   flex: 1;
   min-width: 300px;
 }
@@ -64,19 +64,32 @@ body {
 }
 
 .city-input {
-  margin-top: 5px;
+  margin-top: 0;
+}
+
+/* Search parameters row layout */
+.search-parameters-row {
+  display: flex;
+  gap: 15px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.city-input-container {
+  flex: 1;
+  min-width: 150px;
 }
 
 .city-search-toggle {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .radio-label {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   font-size: 14px;
   color: #555;
   cursor: pointer;
@@ -91,17 +104,18 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 3px;
+  flex-shrink: 0;
 }
 
 .limit-label {
-  font-size: 14px;
+  font-size: 12px;
   color: #555;
   font-weight: 500;
 }
 
 .limit-input {
-  padding: 8px 12px;
+  padding: 6px 10px;
   border: 2px solid #e1e5e9;
   border-radius: 6px;
   font-size: 14px;
@@ -149,17 +163,18 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 3px;
+  flex-shrink: 0;
 }
 
 .threshold-label {
-  font-size: 14px;
+  font-size: 12px;
   color: #555;
   font-weight: 500;
 }
 
 .threshold-input {
-  padding: 8px 12px;
+  padding: 6px 10px;
   border: 2px solid #e1e5e9;
   border-radius: 6px;
   font-size: 14px;
@@ -421,6 +436,16 @@ body {
   }
   
   .search-fields {
+    min-width: auto;
+  }
+  
+  .search-parameters-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  
+  .city-input-container {
     min-width: auto;
   }
   
