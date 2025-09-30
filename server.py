@@ -18,13 +18,13 @@ searcher = HybridSearcher("startups")
 
 
 @app.get("/api/search")
-def search(query: str):
-    return searcher.search(query)
+def search(query: str, limit: int = 5):
+    return searcher.search(query, limit=limit)
 
 
 @app.get("/api/search_city")
-def search_city(query: str, city: str):
-    return searcher.search_city(query, city)
+def search_city(query: str, city: str, limit: int = 5):
+    return searcher.search_city(query, city, limit=limit)
 
 
 if __name__ == "__main__":

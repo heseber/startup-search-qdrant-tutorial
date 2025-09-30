@@ -15,12 +15,30 @@ const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [cityQuery, setCityQuery] = useState('');
   const [enableCitySearch, setEnableCitySearch] = useState(false);
+  const [limit, setLimit] = useState(5);
+  const [limitError, setLimitError] = useState<string | null>(null);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const API_BASE_URL = 'http://localhost:9000';
+
+  const validateLimit = (value: string): boolean => {
+    const num = parseInt(value, 10);
+    if (isNaN(num) || num < 1 || num > 100) {
+      setLimitError('Please enter a number between 1 and 100');
+      return false;
+    }
+    setLimitError(null);
+    return true;
+  };
+
+  const handleLimitChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setLimit(parseInt(value, 10) || 0);
+    validateLimit(value);
+  };
 
   const performSearch = async () => {
     if (!searchQuery.trim()) return;
@@ -32,11 +50,11 @@ const App: React.FC = () => {
       let response;
       if (enableCitySearch && cityQuery.trim()) {
         response = await axios.get(`${API_BASE_URL}/api/search_city`, {
-          params: { query: searchQuery, city: cityQuery }
+          params: { query: searchQuery, city: cityQuery, limit: limit }
         });
       } else {
         response = await axios.get(`${API_BASE_URL}/api/search`, {
-          params: { query: searchQuery }
+          params: { query: searchQuery, limit: limit }
         });
       }
       
@@ -100,11 +118,32 @@ const App: React.FC = () => {
                 className="search-input city-input"
               />
             )}
+
+            <div className="limit-input-container">
+              <label htmlFor="limit-input" className="limit-label">
+                Number of results:
+              </label>
+              <input
+                id="limit-input"
+                type="number"
+                min="1"
+                max="100"
+                value={limit}
+                onChange={handleLimitChange}
+                className={`limit-input ${limitError ? 'error' : ''}`}
+                title={limitError || 'Enter a number between 1 and 100'}
+              />
+              {limitError && (
+                <div className="limit-error-tooltip">
+                  {limitError}
+                </div>
+              )}
+            </div>
           </div>
           
           <button 
             onClick={handleSearch} 
-            disabled={loading || !searchQuery.trim()}
+            disabled={loading || !searchQuery.trim() || !!limitError}
             className="search-button"
           >
             {loading ? 'Searching...' : 'Search'}

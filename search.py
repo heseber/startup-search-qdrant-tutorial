@@ -13,7 +13,9 @@ class HybridSearcher:
         self.quadrant_client = QdrantClient(url="http://localhost:6333")
         self.collection_name = collection_name
 
-    def search(self, text: str, query_filter: Optional[models.Filter] = None):
+    def search(
+        self, text: str, query_filter: Optional[models.Filter] = None, limit: int = 5
+    ):
         search_result = self.quadrant_client.query_points(
             collection_name=self.collection_name,
             query=models.FusionQuery(
@@ -30,7 +32,7 @@ class HybridSearcher:
                 ),
             ],
             query_filter=query_filter,
-            limit=5,
+            limit=limit,
         ).points
         # `search_result` contains models.QueryResponse structure
         # We can access list of scored points with the corresponding similarity scores,
@@ -40,10 +42,10 @@ class HybridSearcher:
         metadata = [point.payload for point in search_result]
         return metadata
 
-    def search_city(self, text: str, city: str):
+    def search_city(self, text: str, city: str, limit: int = 5):
         query_filter = models.Filter(
             must=[
                 models.FieldCondition(key="city", match=models.MatchValue(value=city))
             ]
         )
-        return self.search(text, query_filter)
+        return self.search(text, query_filter, limit)
