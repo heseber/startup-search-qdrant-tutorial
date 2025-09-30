@@ -18,13 +18,15 @@ searcher = HybridSearcher("startups")
 
 
 @app.get("/api/search")
-def search(query: str, limit: int = 5):
-    return searcher.search(query, limit=limit)
+def search(query: str, limit: int = 5, score_threshold: float = 0.7):
+    return searcher.search(query, limit=limit, score_threshold=score_threshold)
 
 
 @app.get("/api/search_city")
-def search_city(query: str, city: str, limit: int = 5):
-    return searcher.search_city(query, city, limit=limit)
+def search_city(query: str, city: str, limit: int = 5, score_threshold: float = 0.7):
+    return searcher.search_city(
+        query, city, limit=limit, score_threshold=score_threshold
+    )
 
 
 if __name__ == "__main__":

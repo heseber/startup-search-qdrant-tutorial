@@ -17,6 +17,8 @@ const App: React.FC = () => {
   const [enableCitySearch, setEnableCitySearch] = useState(false);
   const [limit, setLimit] = useState(5);
   const [limitError, setLimitError] = useState<string | null>(null);
+  const [scoreThreshold, setScoreThreshold] = useState(0.7);
+  const [scoreThresholdError, setScoreThresholdError] = useState<string | null>(null);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [loading, setLoading] = useState(false);
@@ -40,6 +42,22 @@ const App: React.FC = () => {
     validateLimit(value);
   };
 
+  const validateScoreThreshold = (value: string): boolean => {
+    const num = parseFloat(value);
+    if (isNaN(num) || num < 0 || num > 1) {
+      setScoreThresholdError('Please enter a number between 0 and 1');
+      return false;
+    }
+    setScoreThresholdError(null);
+    return true;
+  };
+
+  const handleScoreThresholdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setScoreThreshold(parseFloat(value) || 0);
+    validateScoreThreshold(value);
+  };
+
   const performSearch = async () => {
     if (!searchQuery.trim()) return;
 
@@ -50,11 +68,11 @@ const App: React.FC = () => {
       let response;
       if (enableCitySearch && cityQuery.trim()) {
         response = await axios.get(`${API_BASE_URL}/api/search_city`, {
-          params: { query: searchQuery, city: cityQuery, limit: limit }
+          params: { query: searchQuery, city: cityQuery, limit: limit, score_threshold: scoreThreshold }
         });
       } else {
         response = await axios.get(`${API_BASE_URL}/api/search`, {
-          params: { query: searchQuery, limit: limit }
+          params: { query: searchQuery, limit: limit, score_threshold: scoreThreshold }
         });
       }
       
@@ -139,11 +157,33 @@ const App: React.FC = () => {
                 </div>
               )}
             </div>
+
+            <div className="threshold-input-container">
+              <label htmlFor="threshold-input" className="threshold-label">
+                Score threshold:
+              </label>
+              <input
+                id="threshold-input"
+                type="number"
+                min="0"
+                max="1"
+                step="0.1"
+                value={scoreThreshold}
+                onChange={handleScoreThresholdChange}
+                className={`threshold-input ${scoreThresholdError ? 'error' : ''}`}
+                title={scoreThresholdError || 'Enter a number between 0 and 1'}
+              />
+              {scoreThresholdError && (
+                <div className="threshold-error-tooltip">
+                  {scoreThresholdError}
+                </div>
+              )}
+            </div>
           </div>
           
           <button 
             onClick={handleSearch} 
-            disabled={loading || !searchQuery.trim() || !!limitError}
+            disabled={loading || !searchQuery.trim() || !!limitError || !!scoreThresholdError}
             className="search-button"
           >
             {loading ? 'Searching...' : 'Search'}
