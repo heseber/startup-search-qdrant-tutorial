@@ -42,8 +42,9 @@ echo "Press Ctrl+C to stop all services"
 cleanup() {
     echo ""
     echo "🛑 Stopping services..."
-    kill $BACKEND_PID 2>/dev/null
     kill $FRONTEND_PID 2>/dev/null
+    sleep 3
+    kill $BACKEND_PID 2>/dev/null
     exit 0
 }
 
