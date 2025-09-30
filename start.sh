@@ -18,8 +18,10 @@ echo "✅ Qdrant server is running"
 # Start backend in background
 echo "🔧 Starting FastAPI backend..."
 source .venv/bin/activate
+cd backend
 python server.py &
 BACKEND_PID=$!
+cd ..
 
 # Wait for backend to start
 sleep 3
